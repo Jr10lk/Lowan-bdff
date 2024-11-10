@@ -1,21 +1,7 @@
-$onlyIf[$checkContains[%$toLowercase[$message[1]]%;%lembrete%;%lembrar%;%remind%;%reminder%;%rmd%]==true;]
-
 $onlyIf[$guildID!=;🙅 - Não use comandos em minha dm.]
-
-$onlyIf[$checkContains[$getServerVar[servidor-canais;$guildID];$channelID]!=true;]
-
-$suppressErrors[ 👀 › Eita, parece que tu usou o comando da maneira errada ou é um bug que pode ser consertado em breve]
-
-$onlyIf[$getVar[ban-is;$authorID]==false;**❎ ›** <@$authorID>, alto lá, **você está banido`(a)` por violar meus termos** e não pode mais utilizar meus comandos.
-> **( 📝 )** **Razão do banimento:** `$getVar[ban-reason;$authorID]`
-> **( 📅 )** **Data do banimento:** <t:$getVar[ban-date;$authorID]:F> ( <t:$getVar[ban-date;$authorID]:R> )]
 
 $changeCooldownTime[Dia(s);Hora(s);Minuto(s);Segundo(s)]
 $globalCooldown[5s;$if[$isSlash==false]**⏰ |** <@$authorID>, espere `%time-s%` para usar esse comando novamente.$endif]
-
-$enabled[$getVar[bot-online];**❎ ›** <@$authorID>, Meu sistema foi temporariamente desativado por meus administradores, por favor espere um pouco para me usar novamente.
-**( 📝 )** **Motivo informado:** 
-> **`$getVar[bot-online-reason;$authorID]`**]
 
 $time[America/Sao_Paulo]
 $ignoreTriggerCase
