@@ -1,0 +1,90 @@
+$onlyIf[$checkContains[%$toLowercase[$message[1]]%;%lembrete%;%lembrar%;%remind%;%reminder%;%rmd%]==true;]
+
+$onlyIf[$guildID!=;🙅 - Não use comandos em minha dm.]
+
+$onlyIf[$checkContains[$getServerVar[servidor-canais;$guildID];$channelID]!=true;]
+
+$suppressErrors[ 👀 › Eita, parece que tu usou o comando da maneira errada ou é um bug que pode ser consertado em breve]
+
+$onlyIf[$getVar[ban-is;$authorID]==false;**❎ ›** <@$authorID>, alto lá, **você está banido`(a)` por violar meus termos** e não pode mais utilizar meus comandos.
+> **( 📝 )** **Razão do banimento:** `$getVar[ban-reason;$authorID]`
+> **( 📅 )** **Data do banimento:** <t:$getVar[ban-date;$authorID]:F> ( <t:$getVar[ban-date;$authorID]:R> )]
+
+$changeCooldownTime[Dia(s);Hora(s);Minuto(s);Segundo(s)]
+$globalCooldown[5s;$if[$isSlash==false]**⏰ |** <@$authorID>, espere `%time-s%` para usar esse comando novamente.$endif]
+
+$enabled[$getVar[bot-online];**❎ ›** <@$authorID>, Meu sistema foi temporariamente desativado por meus administradores, por favor espere um pouco para me usar novamente.
+**( 📝 )** **Motivo informado:** 
+> **`$getVar[bot-online-reason;$authorID]`**]
+
+$time[America/Sao_Paulo]
+$ignoreTriggerCase
+$nomention
+$reply
+
+$async[seconds]
+$textSplit[$message[2];s]
+$if[$isNumber[$message[2]]==true]
+$message[2]
+$elseif[$isNumber[$splitText[1]]==true]
+$splitText[1]
+$else
+$textSplit[$splitText[1];m]
+$if[$isNumber[$splitText[2]]==true]
+$splitText[2]
+$else
+0
+$endif
+$endif
+$endasync
+$var[seconds;$await[seconds]]
+ 
+$async[minutes]
+$textSplit[$message[2];m]
+$if[$isNumber[$splitText[1]]==true]
+$splitText[1]
+$else
+$textSplit[$splitText[1];h]
+$if[$isNumber[$splitText[2]]==true]
+$splitText[2]
+$else
+0
+$endif
+$endif
+$endasync
+ 
+$async[hours]
+$textSplit[$message[2];h]
+$if[$isNumber[$splitText[1]]==true]
+$splitText[1]
+$else
+0
+$endif
+$endasync
+
+$nomention$reply
+$suppressErrors[❎ - $username, argumento inválido! `(Modelo: n!lembrete <tempo> [motivo\])`]
+ 
+$onlyIf[$sum[$multi[3600;$await[hours]];$multi[60;$await[minutes]];$await[seconds]]<345600;❎ - $username, o tempo máximo é de 4 dias.]
+$onlyIf[$charCount[$message[2]]<=70;❎ - $username, você atingiu o limite de caracteres! `(Limite: 70)`]
+$onlyIf[$message[2]!=;❎ - $username, falta argumento! `(Modelo: n!lembrete <tempo> [motivo\]`]
+$onlyIf[$sum[$multi[3600;$await[hours]];$multi[60;$await[minutes]];$await[seconds]]>1;❎ - $username, argumento inválido! `(Letras disponíveis: "s", "m" e "h")`]
+
+$nomention
+$allowMention
+$sendEmbedMessage[$channelID;;$reply;;✅ - $username, lembrete definido!
+> Tempo: `$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$replaceText[$await[hours] horas, $await[minutes] minutos e $await[seconds] segundos;1 hours;1 hora];1 minutes;1 minuto];1 seconds;1 segundo];0 hora, ;];0 minuto e;]`;
+;];$getVar[cor]]
+$async[reminder]
+$var[thingy;$repeatMessage[10;$repeatMessage[10;$repeatMessage[10;$repeatMessage[10;$repeatMessage[10;0]]]]]]
+$var[thingy;$cropText[$var[thingy];$sum[$multi[60;$await[hours]];$await[minutes]];]]
+$eval[$replaceText[$var[thingy];0;%{DOL}%replyIn[1m\]]]$var[seconds]
+$var[thingy;$repeatMessage[10;$repeatMessage[10;$repeatMessage[10;$repeatMessage[10;$repeatMessage[10;0]]]]]]
+$var[thingy;$cropText[$var[thingy];$await[seconds];]]
+$eval[$replaceText[$var[thingy];0;%{DOL}%replyIn[1s\]]]
+$sendEmbedMessage[$channelID;🔔 - Alô, <@$authorID>! O horário do seu lembrete terminou!
+> Motivo: **$replaceText[$replaceText[$checkCondition[$message[3]==];false;$replaceText[$message[3];_; ;-1];1];true;Não informado]** ;;;
+ 
+[Ir para a mensagem\](https://discord.com/channels/$guildID/$channelID/$messageID);$getVar[cor]]
+$endasync
+$endif
